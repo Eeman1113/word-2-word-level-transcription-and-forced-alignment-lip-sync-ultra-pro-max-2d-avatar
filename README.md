@@ -52,6 +52,14 @@ This Python script utilizes various libraries such as `matplotlib`, `pydub`, `nu
 
 The script generates both AVI and MP4 video files along with a final synchronized video. The processed decibel levels and assigned images are printed for analysis.
 
+
+
+
+https://github.com/Eeman1113/word-2-word-level-transcription-and-forced-alignment-lip-sync-ultra-pro-max-2d-avatar/assets/54275491/66dd0030-aebe-4272-ab71-f8691560b909
+
+
+
+
 Feel free to experiment with different audio files and customize the image assignment logic for your creative needs.
 
 Enjoy exploring the world of audio visualization with the "Word-2-Word Level Transcription and Forced Alignment Lip Sync Ultra Pro Max 2D Avatar" project!
