@@ -1,65 +1,46 @@
 # Word-2-Word Level Transcription and Forced Alignment Lip Sync Ultra Pro Max 2D Avatar
 
-Welcome to the repository for the "Word-2-Word Level Transcription and Forced Alignment Lip Sync Ultra Pro Max 2D Avatar" project! This project involves analyzing audio files, calculating decibel levels, and generating a synchronized video with dynamic images based on the audio characteristics.
 
 ## Overview
 
-This Python script utilizes various libraries such as `matplotlib`, `pydub`, `numpy`, `cv2`, `glob`, `os`, `moviepy`, and `pathlib` to perform the following tasks:
-
-1. **Decibel Calculation**: The script calculates decibel levels from an input audio file using the root mean square (RMS) method.
-
-2. **Processing Decibel Levels**: After obtaining decibel levels, the script processes them, replacing any infinite or NaN values and providing average and maximum decibel levels.
-
-3. **Image Assignment**: Based on the processed decibel levels, the script assigns different images to different ranges of decibel values. This can be customized to create a visually dynamic representation of the audio.
-
-4. **Video Creation**: The assigned images are then used to create a video file in both AVI and MP4 formats. The resulting videos visually represent the audio characteristics over time.
-
-5. **Final Video**: The script combines the generated video with the original audio to produce a final synchronized video.
+Welcome to the Word-2-Word Level Transcription and Forced Alignment Lip Sync Ultra Pro Max 2D Avatar repository! This project brings the magic of lip synchronization to a whole new level by aligning word-level transcriptions with audio, creating a lively 2D avatar that syncs with spoken words. The code utilizes Python, OpenCV, MoviePy, and PyDub to achieve this entertaining feat.
 
 ## How to Use
 
-1. Clone the repository:
-
+1. **Clone the Repository**
     ```bash
     git clone https://github.com/Eeman1113/word-2-word-level-transcription-and-forced-alignment-lip-sync-ultra-pro-max-2d-avatar.git
     ```
 
-2. Install the required libraries:
-
+2. **Install Dependencies**
     ```bash
-    pip install matplotlib pydub numpy opencv-python moviepy
+    pip install -r requirements.txt
     ```
 
-3. Run the script:
-
+3. **Run the Code**
     ```bash
-    python Some_Diffrent_Shit.py
+    python main.py
     ```
 
-    Make sure to replace `script_name.py` with the actual name of your Python script.
-
-4. Customize the input audio file path:
-
-    Modify the `main` function to point to your desired audio file:
-
-    ```python
-    if __name__ == "__main__":
-        main("/path/to/your/audio/file.m4a")
-        print("Finished!")
-    ```
+4. **Enjoy the Show!**
+    Sit back and watch as the avatar comes to life, syncing its lip movements with the audio.
 
 ## Results
 
-The script generates both AVI and MP4 video files along with a final synchronized video. The processed decibel levels and assigned images are printed for analysis.
+See the magic unfold as the avatar reacts to the audio's decibel levels, generating a lively and engaging video. The code categorizes the audio into different levels, assigning corresponding facial expressions to the avatar for a dynamic viewing experience. The final output is a video that combines audio and visuals seamlessly.
+
+## Let's Let the Code Introduce Itself...
 
 
 
-
-https://github.com/Eeman1113/word-2-word-level-transcription-and-forced-alignment-lip-sync-ultra-pro-max-2d-avatar/assets/54275491/66dd0030-aebe-4272-ab71-f8691560b909
-
+https://github.com/Eeman1113/word-2-word-level-transcription-and-forced-alignment-lip-sync-ultra-pro-max-2d-avatar/assets/54275491/d0be75ea-8837-4826-9507-8496aff80e8a
 
 
 
-Feel free to experiment with different audio files and customize the image assignment logic for your creative needs.
+---
 
-Enjoy exploring the world of audio visualization with the "Word-2-Word Level Transcription and Forced Alignment Lip Sync Ultra Pro Max 2D Avatar" project!
+**Note:** This project is a fun experiment in combining audio processing with visual elements. Adjustments and enhancements can be made to further customize the avatar's reactions based on different audio characteristics.
+
+Give it a try, and let your creativity run wild with Word-2-Word Level Transcription and Forced Alignment Lip Sync Ultra Pro Max 2D Avatar!
+
+**Finished!**
