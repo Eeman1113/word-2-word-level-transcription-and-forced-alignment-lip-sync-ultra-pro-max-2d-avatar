@@ -44,7 +44,7 @@ def process_decibel_levels(decibel_levels):
 
     return avg_decibel, max_decibel, decibel_levels
 
-
+#%%
 def categorize_decibel_levels(decibel_levels, avg_decibel):
     # # calculate the silent and low threshhold by analyzing the decibel levels
     # sorted_levels = np.sort(decibel_levels)
@@ -85,7 +85,7 @@ def categorize_decibel_levels(decibel_levels, avg_decibel):
     print(occurences)
     return categorized_levels
 
-
+#%%
 def extract_categories_per_fps(categorized_decibels, frame_rate):
     chunk_duration = (1 / frame_rate * 1000)
     total_frames = math.ceil(len(categorized_decibels) / chunk_duration)
@@ -118,7 +118,7 @@ def extract_categories_per_fps(categorized_decibels, frame_rate):
     return categorized_levels_per_fps
 
 
-
+#%%
 def assign_images(categorized_decibels, frame_rate=12):
     images = []
     
