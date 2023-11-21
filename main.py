@@ -1,13 +1,12 @@
-# %%
-import matplotlib.pyplot as plt
-from pydub import AudioSegment
-import numpy as np
+import os
 import cv2
-from moviepy.editor import VideoFileClip, AudioFileClip
 import math
 import random
+import numpy as np
+from pydub import AudioSegment
+import matplotlib.pyplot as plt
+from moviepy.editor import VideoFileClip, AudioFileClip
 
-# %%
 def calculate_decibel(audio):
     samples = np.array(audio.get_array_of_samples())
     rms = np.sqrt(np.mean(np.square(samples)))
@@ -20,15 +19,12 @@ def calculate_decibel(audio):
 
     return decibel
 
-# %%
 def get_decibel_levels(audio_path):
     audio = AudioSegment.from_file(audio_path)
     decibel_levels = [calculate_decibel(audio[i:i+1]) for i in range(0, len(audio), 1)]
     return decibel_levels
 
 
-
-# %%
 def process_decibel_levels(decibel_levels):
     for i in range(len(decibel_levels)):
         if math.isinf(decibel_levels[i]):
@@ -39,53 +35,34 @@ def process_decibel_levels(decibel_levels):
     avg_decibel = sum(decibel_levels) / len(decibel_levels)
     max_decibel = max(decibel_levels)
 
-    window_size = 40
+    window_size = 160
     decibel_levels = np.convolve(decibel_levels, np.ones(window_size)/window_size, mode='same')
 
     return avg_decibel, max_decibel, decibel_levels
 
-#%%
-def categorize_decibel_levels(decibel_levels, avg_decibel):
-    # # calculate the silent and low threshhold by analyzing the decibel levels
-    # sorted_levels = np.sort(decibel_levels)
-    # silent_threshold_index = int(len(sorted_levels) * 0.1)
-    # low_threshold_index = int(len(sorted_levels) * 0.25)
-    # silent_threshold = sorted_levels[silent_threshold_index]
-    # low_threshold = sorted_levels[low_threshold_index]
 
-    # categorized_levels = []
-    # occurences = {"silent": 0, "low": 0, "high": 0}
-    # for level in decibel_levels:
-    #     if level <= silent_threshold:
-    #         categorized_levels.append("silent")
-    #         occurences["silent"] += 1
-    #     elif level <= low_threshold:
-    #         categorized_levels.append("low")
-    #         occurences["low"] += 1
-    #     else:
-    #         categorized_levels.append("high")
-    #         occurences["high"] += 1
+def categorize_decibel_levels(decibel_levels, avg_decibel, max_decibel):
 
     categorized_levels = []
     occurences = {"silent": 0, "low": 0, "high": 0}
     for level in decibel_levels:
-        if 0 <= level < avg_decibel / 4:
+        if 0 <= level < avg_decibel * 0.3:
             categorized_levels.append("silent")
             occurences["silent"] += 1
-        elif avg_decibel / 4 <= level < avg_decibel / 2:
+        elif avg_decibel*0.3 <= level < avg_decibel*0.65:
             categorized_levels.append("low")
             occurences["low"] += 1
-        elif avg_decibel / 2 <= level < avg_decibel:
+        elif avg_decibel*0.65 <= level < avg_decibel:
             categorized_levels.append("high")     
             occurences["high"] += 1
-        elif level >= avg_decibel * 3 / 4:
+        elif level >= avg_decibel*0.75:
             categorized_levels.append("silent")
             occurences["silent"] += 1
 
     print(occurences)
     return categorized_levels
 
-#%%
+
 def extract_categories_per_fps(categorized_decibels, frame_rate):
     chunk_duration = (1 / frame_rate * 1000)
     total_frames = math.ceil(len(categorized_decibels) / chunk_duration)
@@ -118,7 +95,7 @@ def extract_categories_per_fps(categorized_decibels, frame_rate):
     return categorized_levels_per_fps
 
 
-#%%
+
 def assign_images(categorized_decibels, frame_rate=12):
     images = []
     
@@ -139,7 +116,7 @@ def assign_images(categorized_decibels, frame_rate=12):
         if level == "silent":
             images += ['./gwack/neutral.png']*chunk_length
         elif level == "low":
-            visemes = ['open_round', 'lips_pursed', 'tongue', 'teeth_open', 'teeth_close']
+            visemes = ['open_round', 'tongue', 'teeth_open', 'teeth_close']
             # probabilities = [0.2, 0.3, 0.2, 0.15, 0.15]
             # choice = random.choices(visemes, weights=probabilities)[0]
             choice = random.choices(visemes)[0]
@@ -175,7 +152,6 @@ def assign_images(categorized_decibels, frame_rate=12):
 
     return images
 
-# %%
 def img_array(arr):
     img_array = []
 
@@ -186,7 +162,6 @@ def img_array(arr):
         img_array.append(img)
     return img_array
 
-# %%
 def stitch_frames_to_video(images, output_path, codec='DIVX', fps=1000):
     animation = img_array(images)
     frame_size = (animation[0].shape[1], animation[0].shape[0])
@@ -198,7 +173,6 @@ def stitch_frames_to_video(images, output_path, codec='DIVX', fps=1000):
 
     out.release()
 
-# %%
 def create_final_video(video_path, audio_path, output_path, title="sample"):
     video_clip = VideoFileClip(video_path)
     audio_clip = AudioFileClip(audio_path)
@@ -206,13 +180,13 @@ def create_final_video(video_path, audio_path, output_path, title="sample"):
     final_clip.write_videofile(output_path + ".mp4")
 
 
-# %%
 def main(path):
     audio_path = path
+    video_name = path.split('/')[-1].split('.')[0]
     decibel_levels = get_decibel_levels(audio_path)
 
     avg_decibel, max_decibel, processed_decibel_levels = process_decibel_levels(decibel_levels)
-    categorized_decibels = categorize_decibel_levels(processed_decibel_levels, avg_decibel)
+    categorized_decibels = categorize_decibel_levels(processed_decibel_levels, avg_decibel, max_decibel)
 
     print("Processed Decibel Levels:", len(processed_decibel_levels))
     print("Average Decibel Level:", avg_decibel)
@@ -223,14 +197,17 @@ def main(path):
 
     video_output_path_mp4 = 'project.mp4'
     stitch_frames_to_video(assigned_images, video_output_path_mp4, codec='mp4v', fps=1000)
-    create_final_video(video_output_path_mp4, audio_path, 'final_output_mp4', title="sample")
+    create_final_video(video_output_path_mp4, audio_path, './video/'+video_name, title="sample")
+    # delete project.mp4
+    
+    os.remove(video_output_path_mp4)
 
     # video_output_path_avi = 'project.avi'
     # stitch_frames_to_video(assigned_images, video_output_path_avi, codec='DIVX', fps=24)
     # create_final_video(video_output_path_avi, audio_path, 'final_output_avi', title="sample")
 
-# %%
 if __name__ == "__main__":
     # main("./sound/srishti_dora_sample.m4a")
-    main('./sound/repo_description_daniel.mp3')
+    # main('./sound/repo_description_daniel.mp3')
+    main('./sound/11labs_chacha_chaudhary_raghubir_yadav.mp3')
     print("Finished!")
